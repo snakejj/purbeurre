@@ -6,7 +6,7 @@ from config import M_user,M_password
 
 ########################
 
-def executeScriptsFromFile(filename):
+def execute_scripts_from_file(cursor,filename):
     # Open and read the file as a single buffer
     fd = open(filename, 'r')
     sqlFile = fd.read()
@@ -20,13 +20,10 @@ def executeScriptsFromFile(filename):
         # For example, if the tables do not yet exist, this will skip over
         # the DROP TABLE commands
         
-        try:
-            command = command + ";"
-            print(command)
-            cursor.execute(command)
-            print("Command executed")
-        except :
-            print ("Command skipped")
+        command = command + ";"
+        print(command)
+        cursor.execute(command)
+        print("Command executed")
 
 ########################
 
@@ -38,7 +35,7 @@ cnx = mysql.connector.connect\
 cursor = cnx.cursor()
 
 
-executeScriptsFromFile("sql_script_purbeurre.sql")
+execute_scripts_from_file(cursor, "sql_script_purbeurre.sql")
 
 cursor.close()
 cnx.close()
