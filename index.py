@@ -12,15 +12,16 @@ def execute_scripts_from_file(cursor,filename):
     sqlFile = fd.read()
     fd.close()
 
-    # all SQL commands (split on ';')
-    sqlCommands = sqlFile.split(';')
+
+    # Eliminer les commantaires et les fin de ligne
+    sqlFile = "".join(line for line in sqlFile.split("\n") if not line.startswith('--'))
+
+    # Eliminer les lignes vides
+    sqlCommands = [line.strip() for line in sqlFile.split(";") if line.strip()]
+
     # Execute every command from the input file
     for command in sqlCommands:
-        # This will skip and report errors
-        # For example, if the tables do not yet exist, this will skip over
-        # the DROP TABLE commands
-        
-        command = command + ";"
+
         print(command)
         cursor.execute(command)
         print("Command executed")
