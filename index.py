@@ -52,7 +52,7 @@ response = requests.get("https://fr.openfoodfacts.org/cgi/search.pl?search_terms
 result = json.loads(response.text)
 
 for p in result['products'] :
-    if p['product_name_fr'] and p['url'] and p['stores'] and p['ingredients_text_fr'] :
+    if p['product_name_fr'] and p['url'] and p['stores'] and p['ingredients_text_fr'] and p['nutrition_grades_tags'] :
         print("Le produit a tout les criteres, merci de remplacer ce print par un INSERT")
         #Launch a function which would INSERT INTO Food ...
     else:
