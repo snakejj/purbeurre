@@ -8,7 +8,10 @@ from config import M_user,M_password
 
 ########################
 
-def execute_scripts_from_file(cursor,filename):
+
+
+
+def execute_sql_from_file(cursor,filename):
     # Open and read the file as a single buffer
     fd = open(filename, 'r')
     sqlFile = fd.read()
@@ -43,7 +46,7 @@ cnx = mysql.connector.connect\
 auth_plugin='mysql_native_password')
 cursor = cnx.cursor()
 
-execute_scripts_from_file(cursor, "sql_script_purbeurre.sql")
+execute_sql_from_file(cursor, "sql_script_purbeurre.sql")
 
 #Sorting data
 
