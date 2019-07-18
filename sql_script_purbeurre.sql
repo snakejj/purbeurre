@@ -22,7 +22,7 @@ USE `PurBeurre` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `PurBeurre`.`Category` (
   `category_id` INT NOT NULL AUTO_INCREMENT,
-  `category_name` VARdCsHAR(45) NULL COMMENT 'categories',
+  `category_name` VARCHdsqdsqAR(45) NULL COMMENT 'categories',
   PRIMARY KEY (`category_id`))
 ENGINE = InnoDB;
 
@@ -33,10 +33,10 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `PurBeurre`.`Food` (
   `food_id` INT NOT NULL,
   `category_id` INT NOT NULL,
-  `food_name` VARCdsqdHAR(80) NULL COMMENT 'product_name',
-  `ingredients_text` MEDIdsqdUMTEXT NULL,
-  `store` VARCHAdsqR(45) NULL COMMENT 'stores',
-  `off_link` VARsdqCHAR(255) NULL COMMENT 'url',
+  `food_name` VARCHAR(80) NULL COMMENT 'product_name',
+  `ingredients_text` MEDIUMTEXT NULL,
+  `store` VARCHAR(45) NULL COMMENT 'stores',
+  `off_link` VARCHAR(255) NULL COMMENT 'url',
   `nutriscore` TINYTEXT NULL COMMENT 'nutrition-score-fr_100g',
   PRIMARY KEY (`food_id`, `category_id`),
   INDEX `fk_Food_1_idx` (`category_id` ASC) VISIBLE,

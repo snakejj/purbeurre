@@ -24,19 +24,16 @@ def execute_sql_from_file(cursor,filename):
     # Get rid of empty lines
     sqlCommands = [line.strip() for line in sqlFile.split(";") if line.strip()]
     command_number = 1
+
+   
     # Execute every command from the input file
     for command in sqlCommands:
         # This will skip and report errors
         # For example, if the tables do not yet exist, this will skip over
         # the DROP TABLE commands
         
-        try:
-            cursor.execute(command)
-        except OperationalError as error:
-            print("Command skipped:",command_number,"{}".format(error))
-
-
-
+        cursor.execute(command)
+    
 def sorting_product(category):
 
     response = requests.get("https://fr.openfoodfacts.org/cgi/search.pl?search_terms2={}&action=process&json=1&page_size=20".format(category))
@@ -55,6 +52,9 @@ def sorting_product(category):
 ####################################
 #Connecting/creating Database
 ####################################
+
+connected = True
+
 try:
 
         
@@ -89,20 +89,22 @@ except mysql.connector.Error as error:
     except:
         
         print("Error while creating the database, thanks to contact the admin")
+        cursor.execute("DROP database PurBeurre;")             
+        connected = False
 
 ####################################
 #Sorting data
 ####################################   
+if connected :
+
+    sorting_product("Yaourts")
+
+else:
+
+    #Closing Database cursor/connection
+    cursor.close()
+    cnx.close()
 
 
-sorting_product("Yaourts")
-
-
-####################################
-#Closing Database connection
-####################################
-
-cursor.close()
-cnx.close()
 
 
