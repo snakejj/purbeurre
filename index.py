@@ -47,6 +47,34 @@ def sorting_product(category):
         else:
             print("Incomplet !") 
 
+def filling_category_db():
+    
+
+    cursor = cnx.cursor()
+    cursor.execute("""SELECT * FROM Category""")
+
+    rows_count = cursor.fetchone()
+
+    if rows_count == None:
+        try:
+            
+            cursor.execute("""INSERT INTO Category (category_name)
+                              VALUES
+                              ('Yaourts'),
+                              ('Chocolats'),
+                              ('Boissons'),
+                              ('Snacks'),
+                              ('Produits laitiers');""")
+            print("Categories successfully inserted !")
+            cnx.commit()
+        except:
+            
+            print("Error while inserting categories in DB")
+    else:
+        print("Categories already in the DB")
+
+
+
 ################################################################################
 
 ####################################
@@ -93,11 +121,13 @@ except mysql.connector.Error as error:
         connected = False
 
 ####################################
-#Sorting data
+# MAIN
 ####################################   
 if connected :
 
-    sorting_product("Yaourts")
+
+    filling_category_db()
+    
 
 else:
 

@@ -22,7 +22,7 @@ USE `PurBeurre` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `PurBeurre`.`Category` (
   `category_id` INT NOT NULL AUTO_INCREMENT,
-  `category_name` VARCHdsqdsqAR(45) NULL COMMENT 'categories',
+  `category_name` VARCHAR(45) NULL COMMENT 'categories',
   PRIMARY KEY (`category_id`))
 ENGINE = InnoDB;
 
