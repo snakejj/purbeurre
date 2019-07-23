@@ -139,11 +139,14 @@ except mysql.connector.Error as error:
 # MAIN
 ####################################   
 if connected :
-
-    boissons = "Boissons"
-    cursor.execute("SELECT category_id FROM Category WHERE category_name = 'Boissons'")
+    
+    cursor.execute("SELECT * FROM Category")
     idcateg = cursor.fetchone()
-    print(idcateg)
+    if idcateg == None :
+        filling_category_db()
+        print("Filling OK")
+    else:
+        print("fillinf KO")
 
 else:
 
