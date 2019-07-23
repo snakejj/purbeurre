@@ -36,14 +36,26 @@ def execute_sql_from_file(cursor,filename):
     
 def sorting_product(category):
 
-    response = requests.get("https://fr.openfoodfacts.org/cgi/search.pl?search_terms2={}&action=process&json=1&page_size=20".format(category))
+    cursor = cnx.cursor()
 
+    response = requests.get("https://fr.openfoodfacts.org/cgi/search.pl?search_terms2={}&action=process&json=1&page_size=20".format(category))
     result = json.loads(response.text)
 
+    sql_id_categ = ("SELECT category_id FROM Category WHERE category_name = %s"\
+                   ,(category))
+
     for p in result['products'] :
-        if p['product_name_fr'] and p['url'] and p['stores'] and p['ingredients_text_fr'] and p['nutrition_grades_tags'] :
-            print("Disponible.")
-            #Launch a function which would INSERT INTO Food ...
+        if p['code'] and p['product_name_fr'] and p['url'] and p['stores'] and p['ingredients_text_fr'] and p['nutrition_grades_tags']:
+
+            cursor.execute("""INSERT INTO Food (category_name)
+                              VALUES
+                              ('Yaourts'),
+                              ('Chocolats'),
+                              ('Boissons'),
+                              ('Snacks'),
+                              ('Produits laitiers');""")
+
+            cnx.commit()
         else:
             print("Incomplet !") 
 
@@ -74,6 +86,9 @@ def filling_category_db():
         print("Categories already in the DB")
 
 
+#def filling_product_db():
+
+    
 
 ################################################################################
 
@@ -125,9 +140,10 @@ except mysql.connector.Error as error:
 ####################################   
 if connected :
 
-
-    filling_category_db()
-    
+    boissons = "Boissons"
+    cursor.execute("SELECT category_id FROM Category WHERE category_name = 'Boissons'")
+    idcateg = cursor.fetchone()
+    print(idcateg)
 
 else:
 
