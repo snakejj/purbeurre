@@ -34,9 +34,9 @@ def execute_sql_from_file(cursor,filename):
         
         cursor.execute(command)
     
-def sorting_product(category):
+def sorting_product(cursor,category):
 
-    cursor = cnx.cursor()
+    
 
     response = requests.get("https://fr.openfoodfacts.org/cgi/search.pl?search_terms2={}&action=process&json=1&page_size=20".format(category))
     result = json.loads(response.text)
@@ -59,10 +59,10 @@ def sorting_product(category):
         else:
             print("Incomplet !") 
 
-def filling_category_db():
+def filling_category_db(cursor):
     
 
-    cursor = cnx.cursor()
+    
     cursor.execute("""SELECT * FROM Category""")
 
     rows_count = cursor.fetchone()
@@ -79,6 +79,7 @@ def filling_category_db():
                               ('Produits laitiers');""")
             print("Categories successfully inserted !")
             cnx.commit()
+            
         except:
             
             print("Error while inserting categories in DB")
@@ -110,7 +111,8 @@ try:
                                   auth_plugin='mysql_native_password')
         
     print("\nConnected successfully !\n")
-    cursor = cnx.cursor()
+    
+   
         
         
 except mysql.connector.Error as error:
@@ -128,26 +130,34 @@ except mysql.connector.Error as error:
         cursor = cnx.cursor()
         execute_sql_from_file(cursor, "sql_script_purbeurre.sql")
         print("\nDatabase created with success !\n")
-        
+        cursor.close()
     except:
-        
+        cursor = cnx.cursor()
         print("Error while creating the database, thanks to contact the admin")
         cursor.execute("DROP database PurBeurre;")             
         connected = False
+        cursor.close()
 
 ####################################
 # MAIN
 ####################################   
-if connected :
-    
-    cursor.execute("SELECT * FROM Category")
-    idcateg = cursor.fetchone()
-    if idcateg == None :
-        filling_category_db()
-        print("Filling OK")
-    else:
-        print("fillinf KO")
 
+
+if connected :
+    cursor = cnx.cursor()
+    filling_category_db(cursor)
+    
+    # TEST VARIABLE IN SQL QUERY.
+
+#    sql_test_query = 'UPDATE Category SET category_name= %s where id = %s'
+    
+#    catn = "TOTO"
+#    id = 3
+#    input_tuple = (catn, id)
+    
+#    cursor.execute(sql_test_query, input_tuple)
+#    cnx.commit()
+    # FIN TEST VARIABLE 
 else:
 
     #Closing Database cursor/connection
