@@ -16,6 +16,7 @@ def execute_sql_from_file(cursor,filename):
     fd.close()
 
    
+    
 
     # Get rid of commentary and ends-lines
     sqlFile = "".join(line for line in sqlFile.split("\n")\
@@ -34,15 +35,18 @@ def execute_sql_from_file(cursor,filename):
         
         cursor.execute(command)
     
+    
 def sorting_product(cursor,category):
 
     
-
+    
     response = requests.get("https://fr.openfoodfacts.org/cgi/search.pl?search_terms2={}&action=process&json=1&page_size=20".format(category))
     result = json.loads(response.text)
 
-    sql_id_categ = ("SELECT category_id FROM Category WHERE category_name = %s"\
-                   ,(category))
+    cursor.execute("SELECT category_id FROM Category WHERE category_name = 'Boissons'")
+
+    numid = cursor.fetchone()
+    print(numid)
 
     for p in result['products'] :
         if p['code'] and p['product_name_fr'] and p['url'] and p['stores'] and p['ingredients_text_fr'] and p['nutrition_grades_tags']:
@@ -58,6 +62,7 @@ def sorting_product(cursor,category):
             cnx.commit()
         else:
             print("Incomplet !") 
+        
 
 def filling_category_db(cursor):
     
@@ -85,7 +90,7 @@ def filling_category_db(cursor):
             print("Error while inserting categories in DB")
     else:
         print("Categories already in the DB")
-
+    
 
 #def filling_product_db():
 
@@ -98,6 +103,7 @@ def filling_category_db(cursor):
 ####################################
 
 connected = True
+
 
 try:
 
@@ -112,6 +118,8 @@ try:
         
     print("\nConnected successfully !\n")
     
+    cursor = cnx.cursor()
+    print("\nOuverture du cursor !\n")
    
         
         
@@ -125,18 +133,20 @@ except mysql.connector.Error as error:
                                   host='localhost',
                                   auth_plugin='mysql_native_password')
 
+    cursor = cnx.cursor()
+    print("\nOuverture du cursor lors du else !\n")
     
     try:
-        cursor = cnx.cursor()
+        
         execute_sql_from_file(cursor, "sql_script_purbeurre.sql")
         print("\nDatabase created with success !\n")
-        cursor.close()
+        
     except:
-        cursor = cnx.cursor()
+        
         print("Error while creating the database, thanks to contact the admin")
         cursor.execute("DROP database PurBeurre;")             
         connected = False
-        cursor.close()
+        
 
 ####################################
 # MAIN
@@ -144,25 +154,23 @@ except mysql.connector.Error as error:
 
 
 if connected :
-    cursor = cnx.cursor()
     filling_category_db(cursor)
+    toto = "TOTO"
+    cursor.execute("INSERT INTO Category VALUES (%s)", (toto, ))
+    
+#    sorting_product(cursor,"Yaourts")
     
     # TEST VARIABLE IN SQL QUERY.
+   
+#    sql_test_query = """UPDATE Category SET category_name= %s where id = %s""", ("TOTO", 3
+    
+    
+#    cursor.execute(sql_test_query)
 
-#    sql_test_query = 'UPDATE Category SET category_name= %s where id = %s'
-    
-#    catn = "TOTO"
-#    id = 3
-#    input_tuple = (catn, id)
-    
-#    cursor.execute(sql_test_query, input_tuple)
 #    cnx.commit()
+#    cursor.close()
     # FIN TEST VARIABLE 
-else:
 
-    #Closing Database cursor/connection
-    cursor.close()
-    cnx.close()
 
 
 
