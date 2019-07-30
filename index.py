@@ -75,13 +75,15 @@ def filling_category_db(cursor):
     if rows_count == None:
         try:
             
-            cursor.execute("""INSERT INTO Category (category_name)
-                              VALUES
-                              ('Yaourts'),
-                              ('Chocolats'),
-                              ('Boissons'),
-                              ('Snacks'),
-                              ('Produits laitiers');""")
+#            cursor.execute("""INSERT INTO Category (category_name)
+#                              VALUES
+#                              ('Yaourts'),
+#                              ('Chocolats'),
+#                              ('Boissons'),
+#                              ('Snacks'),
+#                              ('Produits laitiers');""")
+#            
+                
             print("Categories successfully inserted !")
             cnx.commit()
             
@@ -120,7 +122,7 @@ try:
     
     cursor = cnx.cursor()
     print("\nOuverture du cursor !\n")
-   
+    
         
         
 except mysql.connector.Error as error:
@@ -156,8 +158,11 @@ except mysql.connector.Error as error:
 if connected :
     filling_category_db(cursor)
     toto = "TOTO"
-    cursor.execute("INSERT INTO Category VALUES (%s)", (toto, ))
-    
+    titi = "tadsrata"
+    idnumo = 2
+#    cursor.execute("INSERT INTO Category (category_name) VALUES (%s)", (toto, )) 
+    cursor.execute('UPDATE Category SET category_name= (%s) WHERE category_id = (%s)', (titi, idnumo,))
+    cnx.commit()
 #    sorting_product(cursor,"Yaourts")
     
     # TEST VARIABLE IN SQL QUERY.
