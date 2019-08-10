@@ -35,34 +35,6 @@ def execute_sql_from_file(cursor,filename):
         
         cursor.execute(command)
     
-    
-def sorting_product(cursor,category):
-
-    
-    
-    response = requests.get("https://fr.openfoodfacts.org/cgi/search.pl?search_terms2={}&action=process&json=1&page_size=20".format(category))
-    result = json.loads(response.text)
-
-    cursor.execute("SELECT category_id FROM Category WHERE category_name = 'Boissons'")
-
-    numid = cursor.fetchone()
-    print(numid)
-
-    for p in result['products'] :
-        if p['code'] and p['product_name_fr'] and p['url'] and p['stores'] and p['ingredients_text_fr'] and p['nutrition_grades_tags']:
-
-            cursor.execute("""INSERT INTO Food (category_name)
-                              VALUES
-                              ('Yaourts'),
-                              ('Chocolats'),
-                              ('Boissons'),
-                              ('Snacks'),
-                              ('Produits laitiers');""")
-
-            cnx.commit()
-        else:
-            print("Incomplet !") 
-        
 
 def filling_category_db(cursor):
     
@@ -75,14 +47,14 @@ def filling_category_db(cursor):
     if rows_count == None:
         try:
             
-#            cursor.execute("""INSERT INTO Category (category_name)
-#                              VALUES
-#                              ('Yaourts'),
-#                              ('Chocolats'),
-#                              ('Boissons'),
-#                              ('Snacks'),
-#                              ('Produits laitiers');""")
-#            
+            cursor.execute("""INSERT INTO Category (category_name)
+                              VALUES
+                              ('Yaourts'),
+                              ('Chocolats'),
+                              ('Boissons'),
+                              ('Snacks'),
+                              ('Produits laitiers');""")
+            
                 
             print("Categories successfully inserted !")
             cnx.commit()
@@ -92,6 +64,29 @@ def filling_category_db(cursor):
             print("Error while inserting categories in DB")
     else:
         print("Categories already in the DB")
+
+    
+def sorting_product(cursor,category):
+
+    
+    
+    response = requests.get("https://fr.openfoodfacts.org/cgi/search.pl?search_terms2={}&action=process&json=1&page_size=20".format(category))
+    result = json.loads(response.text)
+
+    cursor.execute('SELECT category_id FROM Category WHERE category_name = (%s)', (category,))
+    numid = cursor.fetchone()
+    print(numid)
+
+    for p in result['products'] :
+        if p['code'] and p['product_name_fr'] and p['url'] and p['stores'] and p['ingredients_text_fr'] and p['nutrition_grades_tags']:
+
+            cursor.execute("INSERT INTO Food VALUES (%s, %s, %s, %s, %s, %s, %s)", (p['code'], numid, p['product_name_fr'], p['ingredients_text_fr'], p['stores'], p['url'], p['nutrition_grades_tags'], ))
+            cnx.commit()
+        else:
+            print("Incomplet !") 
+        
+
+
     
 
 #def filling_product_db():
@@ -108,7 +103,7 @@ connected = True
 
 
 try:
-
+    
         
     print("\nConnecting to the database ... \n")
 
@@ -163,6 +158,8 @@ if connected :
 #    cursor.execute("INSERT INTO Category (category_name) VALUES (%s)", (toto, )) 
     cursor.execute('UPDATE Category SET category_name= (%s) WHERE category_id = (%s)', (titi, idnumo,))
     cnx.commit()
+    sorting_product(cursor, "Boissons")
+
 #    sorting_product(cursor,"Yaourts")
     
     # TEST VARIABLE IN SQL QUERY.
