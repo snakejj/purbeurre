@@ -43,6 +43,7 @@ def filling_category_db(cursor):
     cursor.execute("""SELECT * FROM Category""")
 
     rows_count = cursor.fetchone()
+    print(rows_count)
 
     if rows_count == None:
         try:
