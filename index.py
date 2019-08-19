@@ -76,15 +76,15 @@ def sorting_product(cursor,category):
     cursor.execute('SELECT category_id FROM Category WHERE category_name = (%s)', (category,))
     numid = cursor.fetchone()
     print(numid)
-
+"""
     for p in result['products'] :
         if p['code'] and p['product_name_fr'] and p['url'] and p['stores'] and p['ingredients_text_fr'] and p['nutrition_grades_tags']:
 
-            cursor.execute("INSERT INTO Food VALUES (%s, %s, %s, %s, %s, %s, %s)", (p['code'], numid, p['product_name_fr'], p['ingredients_text_fr'], p['stores'], p['url'], p['nutrition_grades_tags'], ))
+            cursor.execute("INSERT INTO Food (nutriscore) VALUES (%s)", (numid, ))
             cnx.commit()
         else:
             print("Incomplet !") 
-        
+"""        
 
 
     
@@ -152,26 +152,7 @@ except mysql.connector.Error as error:
 
 if connected :
     filling_category_db(cursor)
-    toto = "TOTO"
-    titi = "tadsrata"
-    idnumo = 2
-#    cursor.execute("INSERT INTO Category (category_name) VALUES (%s)", (toto, )) 
-    cursor.execute('UPDATE Category SET category_name= (%s) WHERE category_id = (%s)', (titi, idnumo,))
-    cnx.commit()
     sorting_product(cursor, "Boissons")
-
-#    sorting_product(cursor,"Yaourts")
-    
-    # TEST VARIABLE IN SQL QUERY.
-   
-#    sql_test_query = """UPDATE Category SET category_name= %s where id = %s""", ("TOTO", 3
-    
-    
-#    cursor.execute(sql_test_query)
-
-#    cnx.commit()
-#    cursor.close()
-    # FIN TEST VARIABLE 
 
 
 
