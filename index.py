@@ -42,10 +42,10 @@ def filling_category_db(cursor):
     
     cursor.execute("""SELECT * FROM Category""")
 
-    rows_count = cursor.fetchone()
+    rows_count = cursor.fetchall()
     print(rows_count)
 
-    if rows_count == None:
+    if not rows_count:
         try:
             
             cursor.execute("""INSERT INTO Category (category_name)
@@ -76,16 +76,27 @@ def sorting_product(cursor,category):
 
     cursor.execute('SELECT category_id FROM Category WHERE category_name = (%s)', (category,))
     numid = cursor.fetchone()
-    print(numid)
-"""
-    for p in result['products'] :
-        if p['code'] and p['product_name_fr'] and p['url'] and p['stores'] and p['ingredients_text_fr'] and p['nutrition_grades_tags']:
+    print(numid[0])
+    
 
-            cursor.execute("INSERT INTO Food (nutriscore) VALUES (%s)", (numid, ))
+    for p in result['products'] :
+        if p['code'] and p['product_name_fr'] and p['url'] and p['stores'] and p['ingredients_text_fr'] and p['nutrition_grades_tags'] and len(p['nutrition_grades_tags'][0]) == 1:
+            
+#            cursor.execute("INSERT INTO Food (nutriscore) VALUES (%s)", (numid[0], ))
+            print(numid[0])
+            print(p['nutrition_grades_tags'][0])
+            cursor.execute("INSERT INTO Food (category_id, food_name, ingredients_text, store, off_link, nutriscore) VALUES (%s, %s, %s, %s, %s, %s)", (numid[0], p['product_name_fr'], p['ingredients_text_fr'], p['stores'], p['url'], p['nutrition_grades_tags'][0], ))
+            
+            
+#
+
+#            print(p['code'],p['product_name_fr'],p['url'], p['stores'],p['ingredients_text_fr'],p['nutrition_grades_tags'][0]) 
+                    
             cnx.commit()
+        
         else:
             print("Incomplet !") 
-"""        
+        
 
 
     
