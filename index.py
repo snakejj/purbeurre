@@ -74,32 +74,35 @@ def sorting_and_filling_product(cursor,category):
     response = requests.get("https://fr.openfoodfacts.org/cgi/search.pl?search_terms2={}&action=process&json=1&page_size=100".format(category))
     result = json.loads(response.text)
 
-#    cursor.execute('SELECT food_id FROM Food WHERE category_id = 2')
-#    rows_count = cursor.fetchall()
-#    print(rows_count)
-
-#    if not rows_count:
-#        try:
-#            print("Row count est vide")
     cursor.execute('SELECT category_id FROM Category WHERE category_name = (%s)', (category,))
     numid = cursor.fetchone()
-    #    print(numid[0])
-    for p in result['products'] :
-        if p['code'] and 4 < len(p['product_name_fr']) < 80 and len(p['url']) < 255 and 1 < len(p['stores']) < 150 and p['ingredients_text_fr'] and len(p['nutrition_grades_tags'][0]) == 1:
-            
-#            print(p['nutrition_grades_tags'][0])
-#            print(p['stores'])
-            cursor.execute("INSERT INTO Food (category_id, food_name, ingredients_text, store, off_link, nutriscore) VALUES (%s, %s, %s, %s, %s, %s)", (numid[0], p['product_name_fr'], p['ingredients_text_fr'], p['stores'], p['url'], p['nutrition_grades_tags'][0], ))
-            
+    print(numid)
 
-                    
-            cnx.commit()
-#        except:
+    cursor.execute('SELECT food_id FROM Food WHERE category_id = (%s)', (numid[0],))
+    rows_count = cursor.fetchall()
+#    print(rows_count)
+
+    if not rows_count:
+        try:
+#            print("Row count est vide")
             
-#            print("EROOOOR") 
+            #    print(numid[0])
+            for p in result['products'] :
+                if p['code'] and 4 < len(p['product_name_fr']) < 80 and len(p['url']) < 255 and 1 < len(p['stores']) < 150 and p['ingredients_text_fr'] and len(p['nutrition_grades_tags'][0]) == 1:
+                    
+        #            print(p['nutrition_grades_tags'][0])
+        #            print(p['stores'])
+                    cursor.execute("INSERT INTO Food (category_id, food_name, ingredients_text, store, off_link, nutriscore) VALUES (%s, %s, %s, %s, %s, %s)", (numid[0], p['product_name_fr'], p['ingredients_text_fr'], p['stores'], p['url'], p['nutrition_grades_tags'][0], ))
+                    
+
+                            
+                    cnx.commit()
+        except:
+            
+            print("EROOOOR") 
      
-#    else :
-#            print("else")       
+    else :
+            print("else")       
     
         
 #        else:
