@@ -109,6 +109,56 @@ def sorting_and_filling_product(cursor,category):
 #            print("Incomplet !") 
         
 
+def option_select():
+    
+    print("""
+
+##############################################################
+
+      """)
+
+    ongoing = True
+
+
+
+    print("1 - Quel aliment souhaitez-vous remplacer ?")
+    print("2 - Retrouver mes aliments substitués.")
+    print("3 - Quitter !")
+        
+
+
+    integ = False
+
+    while not integ :
+        try:
+            option_choice = input("Enter le numéro de l'option souhaité : ")    
+            option_choice = int(option_choice)
+            integ = True
+            if option_choice == 1 :
+            
+                return option_choice
+                  
+
+            elif option_choice == 2 :
+
+                return option_choice
+                    
+
+            elif option_choice == 3 :
+
+                return option_choice
+                
+
+            else :
+
+                print("Cette option n'existe pas !")
+                integ = False           
+
+        except ValueError:
+            print("La saisie est incorrect, vous devez tapez un chiffre.")
+            integ = False
+    
+
 def categ_select():
 
     cursor.execute('SELECT * FROM Category')
@@ -207,38 +257,22 @@ if connected :
 # TERMINAL INTERFACE
 ####################################  
 
-print("""
+option_choice = option_select()
 
-##############################################################
-
-      """)
-
-ongoing = True
-
-
-
-print("1 - Quel aliment souhaitez-vous remplacer ?")
-print("2 - Retrouver mes aliments substitués.")
-print("3 - Quitter !")
-    
-menu_choice = int(input("Enter le numéro de l'option souhaité : "))
-
-while menu_choice < 1 or menu_choice > 3 :
-    menu_choice = int(input("Enter le numéro de l'option souhaité : "))
-    
-if menu_choice == 1 :
+if option_choice == 1 :
         
     categ_select()
               
-
-elif menu_choice == 2 :
+elif option_choice == 2 :
 
     print("En cours de dev")
         
 
-elif menu_choice == 3 :
+elif option_choice == 3 :
     print("Au revoir")
-    
+
+
+
 
     
     
