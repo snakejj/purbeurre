@@ -134,21 +134,10 @@ def option_select():
             option_choice = input("Enter le numéro de l'option souhaité : ")    
             option_choice = int(option_choice)
             integ = True
-            if option_choice == 1 :
+            if 0 < option_choice < 4 :
             
                 return option_choice
-                  
-
-            elif option_choice == 2 :
-
-                return option_choice
-                    
-
-            elif option_choice == 3 :
-
-                return option_choice
-                
-
+           
             else :
 
                 print("Cette option n'existe pas !")
@@ -165,24 +154,65 @@ def categ_select():
     result = cursor.fetchall()
     for a,b in result:
         print(a,":",b)
-    menu_choice = int(input("Enter le numéro de la categorie souhaité : "))
     
-    while menu_choice < 1 or menu_choice > 5 :
-        
-        menu_choice = int(input("Enter le numéro de la categorie souhaité : "))              
 
-    else :
+    integ = False
 
-        product_select(menu_choice)
+    while not integ :
+        try:
+            categ_choice = input("Enter le numéro de la categorie souhaité : ")    
+            categ_choice = int(categ_choice)
+            integ = True
+            if 0 < categ_choice < 6 :
+            
+                return categ_choice
+
+            else :
+
+                print("Cette option n'existe pas !")
+                integ = False           
+
+        except ValueError:
+            print("La saisie est incorrect, vous devez tapez un chiffre.")
+            integ = False
+
         
 
 def product_select(numcateg):
 
-    cursor.execute('SELECT food_id, food_name FROM Food WHERE category_id = (%s)', (numcateg,))
+    cursor.execute('SELECT food_name FROM Food WHERE category_id = (%s) ORDER BY RAND() LIMIT 10 ', (numcateg,))
     result = cursor.fetchall()
-    for a,b in result:
-        print(a,":",b)
-    pass
+    
+    
+    integ = False
+    display = 1
+    clean=["('", "',)"]
+
+
+    for a in result:
+        a = str(a)
+        for i in clean:
+            a=a.replace(i, "")
+        print(display,":",a)
+        display += 1
+
+    while not integ :
+        try:
+            product_choice = input("Enter le numéro du produit souhaité : ")    
+            product_choice = int(product_choice)
+            integ = True
+            if 0 < product_choice < 11 :
+                print("Return of product_choice : OK")
+                return product_choice
+                
+            else :
+
+                print("Cette option n'existe pas !")
+                integ = False           
+
+        except ValueError:
+            print("La saisie est incorrect, vous devez tapez un chiffre.")
+            integ = False
 
 
     
@@ -261,7 +291,8 @@ option_choice = option_select()
 
 if option_choice == 1 :
         
-    categ_select()
+    categ_choice = categ_select()
+    product_select(categ_choice)
               
 elif option_choice == 2 :
 
