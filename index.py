@@ -225,8 +225,31 @@ def product_select(numcateg):
             print("La saisie est incorrect, vous devez tapez un chiffre.")
             integ = False
 
+def altern_select(product,numcateg):
 
+    cursor.execute('SELECT food_name FROM Food WHERE category_id = (%s) AND nutriscore IN(SELECT nutriscore FROM Food WHERE nutriscore <= "b") ORDER BY RAND() LIMIT 3 ', (numcateg,))
+    result = cursor.fetchall() 
     
+    integ = False
+    display = 1
+    i = 1
+#    clean = ["(", ",)"]
+    list_altern = []
+
+    for a in result:
+        a = str(a)
+#        for i in clean:
+#            a=a.replace(i, "")
+
+        list_altern.append(a)
+        display += 1
+
+    list_altern.sort(key=str.lower)
+    for element in list_altern:
+        print(i, ":", element)    
+        i += 1
+
+        
 
 ################################################################################
 
