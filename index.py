@@ -213,7 +213,8 @@ def product_select(numcateg):
             product_choice = int(product_choice)
             integ = True
             if 0 < product_choice < 11 :
-                print("Return of product_choice : OK")
+                print("Recherche de produits alternatifs en cours...")
+                print("")
                 return product_choice
                 
             else :
@@ -225,7 +226,7 @@ def product_select(numcateg):
             print("La saisie est incorrect, vous devez tapez un chiffre.")
             integ = False
 
-def altern_select(product,numcateg):
+def altern_select(numcateg):
 
     cursor.execute('SELECT food_name FROM Food WHERE category_id = (%s) AND nutriscore IN(SELECT nutriscore FROM Food WHERE nutriscore <= "b") ORDER BY RAND() LIMIT 3 ', (numcateg,))
     result = cursor.fetchall() 
@@ -245,11 +246,79 @@ def altern_select(product,numcateg):
         display += 1
 
     list_altern.sort(key=str.lower)
+    print("Voici une liste de 3 produits avec un meilleur nutriscore:")
     for element in list_altern:
         print(i, ":", element)    
         i += 1
 
+    while not integ :
+        try:
+            altern_choice = input("Enter le numéro du produit alternatif souhaité pour plus d'informations : ")    
+            altern_choice = int(altern_choice)
+            integ = True
+            if 0 < altern_choice < 4 :
+                print("Produit alternatif : OK")
+                print("")
+                return list_altern[altern_choice-1]
+                
+            else :
+
+                print("Cette option n'existe pas !")
+                integ = False           
+
+        except ValueError:
+            print("La saisie est incorrect, vous devez tapez un chiffre.")
+            integ = False
         
+def altern_display(altern_choice):
+    
+    altern_choice_str = ''.join(altern_choice)
+    print(type(altern_choice_str))
+
+    clean = ["('", "',)"]
+    for i in clean:
+        altern_choice_str=altern_choice_str.replace(i, "")
+
+    cursor.execute('SELECT * FROM Food WHERE food_name = (%s)', (altern_choice_str,))
+    result = cursor.fetchall()
+    
+    
+    print("Voila a qui ressemble la liste : ", len(result))
+
+    print("Voici la liste des informations pour ce produit :")
+    print("")
+    print("Nom du produit :", altern_choice_str)
+    print("Disponible dans ce(s) magasin(s) :", result[0][4])
+    print("Lien Open Food Fact :", result[0][5])
+    print("Liste des ingredients :", result[0][3])
+    print("Nutriscore (a-e) :", result[0][6])
+
+    integ = False
+    
+
+    print("\nSouhaitez vous sauvegarder cette alternative ?")
+    print("1 - Oui")
+    print("2 - Non")
+        
+    
+    while not integ :
+        try:
+            option_choice = input("Enter le numéro de l'option souhaité : ")    
+            option_choice = int(option_choice)
+            integ = True
+            if 0 < option_choice < 3 :
+                print("en cours de dev : def save_altern")
+                return option_choice
+           
+            else :
+
+                print("Cette option n'existe pas !")
+                integ = False           
+
+        except ValueError:
+            print("La saisie est incorrect, vous devez tapez un chiffre.")
+            integ = False
+
 
 ################################################################################
 
@@ -307,7 +376,7 @@ except mysql.connector.Error as error:
 # MAIN
 ####################################   
 
-
+"""
 if connected :
     filling_category_db(cursor)
     sorting_and_filling_product(cursor, "Yaourts")
@@ -315,7 +384,7 @@ if connected :
     sorting_and_filling_product(cursor, "Boissons")
     sorting_and_filling_product(cursor, "Snacks")
     sorting_and_filling_product(cursor, "Produits laitiers")
-
+"""
 
 ####################################
 # TERMINAL INTERFACE
@@ -327,8 +396,10 @@ if option_choice == 1 :
         
     categ_choice = categ_select()
     product_select(categ_choice)
-    
-              
+    altern_choice = altern_select(categ_choice)
+    altern_display(altern_choice)
+
+          
 elif option_choice == 2 :
 
     print("En cours de dev")
