@@ -180,21 +180,32 @@ def categ_select():
 
 def product_select(numcateg):
 
-    cursor.execute('SELECT food_name FROM Food WHERE category_id = (%s) ORDER BY RAND() LIMIT 10 ', (numcateg,))
+    cursor.execute('SELECT food_name FROM Food WHERE category_id = (%s) AND nutriscore >= "c" ORDER BY RAND() LIMIT 10 ', (numcateg,))
     result = cursor.fetchall()
     
     
     integ = False
     display = 1
-    clean=["('", "',)"]
-
+    i = 1
+#    clean = ["(", ",)"]
+    list_product = []
 
     for a in result:
         a = str(a)
-        for i in clean:
-            a=a.replace(i, "")
-        print(display,":",a)
+#        for i in clean:
+#            a=a.replace(i, "")
+
+        list_product.append(a)
         display += 1
+
+    list_product.sort(key=str.lower)
+    for element in list_product:
+        print(i, ":", element)    
+        i += 1
+
+#    print(list_product)
+
+#    print(display,":",a)
 
     while not integ :
         try:
@@ -293,6 +304,7 @@ if option_choice == 1 :
         
     categ_choice = categ_select()
     product_select(categ_choice)
+    
               
 elif option_choice == 2 :
 
