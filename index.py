@@ -180,28 +180,46 @@ def categ_select():
 
 def product_select(numcateg):
 
-    cursor.execute('SELECT food_name FROM Food WHERE category_id = (%s) AND nutriscore >= "c" ORDER BY RAND() LIMIT 10 ', (numcateg,))
+    cursor.execute('SELECT food_name, food_id FROM Food WHERE category_id = (%s) AND nutriscore >= "c" ORDER BY RAND() LIMIT 10 ', (numcateg,))
     result = cursor.fetchall()
     
-    
+#    print("Test 1:",result)
+#    print("Test 2:",result[0])
+#    print("Test 3:",result[0][0])
+#    print("Test 4:",result[0][1])
     integ = False
-    display = 1
     i = 1
+    j = 1
 #    clean = ["(", ",)"]
     list_product = []
+    id_list = {}
 
-    for a in result:
-        a = str(a)
+    for a, b in result:
+        id_list.update({a : b})
+
+#    print(id_list)
+#    print("")
+#    print(list_product)
+#    for a in result:
+#        a = str(a)
 #        for i in clean:
 #            a=a.replace(i, "")
 
-        list_product.append(a)
-        display += 1
+#        list_product.append(a)
 
+    
+    for element in result:
+        
+#        print(i, ":", element[0])
+        list_product.append(element[0])    
+        i += 1
+
+    
     list_product.sort(key=str.lower)
     for element in list_product:
-        print(i, ":", element)    
-        i += 1
+        print(j, ":", element)    
+        j += 1
+#    print("COMPLETE PRINT TEST :",list_product)
 
 #    print(list_product)
 
@@ -215,7 +233,8 @@ def product_select(numcateg):
             if 0 < product_choice < 11 :
                 print("Recherche de produits alternatifs en cours...")
                 print("")
-                return product_choice
+                product_name = list_product[product_choice-1]
+                return [product_name, id_list]
                 
             else :
 
@@ -232,7 +251,6 @@ def altern_select(numcateg):
     result = cursor.fetchall() 
     
     integ = False
-    display = 1
     i = 1
 #    clean = ["(", ",)"]
     list_altern = []
@@ -243,7 +261,6 @@ def altern_select(numcateg):
 #            a=a.replace(i, "")
 
         list_altern.append(a)
-        display += 1
 
     list_altern.sort(key=str.lower)
     print("Voici une liste de 3 produits avec un meilleur nutriscore:")
@@ -257,7 +274,6 @@ def altern_select(numcateg):
             altern_choice = int(altern_choice)
             integ = True
             if 0 < altern_choice < 4 :
-                print("Produit alternatif : OK")
                 print("")
                 return list_altern[altern_choice-1]
                 
@@ -273,7 +289,6 @@ def altern_select(numcateg):
 def altern_display(altern_choice):
     
     altern_choice_str = ''.join(altern_choice)
-    print(type(altern_choice_str))
 
     clean = ["('", "',)"]
     for i in clean:
@@ -282,8 +297,6 @@ def altern_display(altern_choice):
     cursor.execute('SELECT * FROM Food WHERE food_name = (%s)', (altern_choice_str,))
     result = cursor.fetchall()
     
-    
-    print("Voila a qui ressemble la liste : ", len(result))
 
     print("Voici la liste des informations pour ce produit :")
     print("")
@@ -376,7 +389,7 @@ except mysql.connector.Error as error:
 # MAIN
 ####################################   
 
-"""
+
 if connected :
     filling_category_db(cursor)
     sorting_and_filling_product(cursor, "Yaourts")
@@ -384,7 +397,7 @@ if connected :
     sorting_and_filling_product(cursor, "Boissons")
     sorting_and_filling_product(cursor, "Snacks")
     sorting_and_filling_product(cursor, "Produits laitiers")
-"""
+
 
 ####################################
 # TERMINAL INTERFACE
@@ -395,7 +408,16 @@ option_choice = option_select()
 if option_choice == 1 :
         
     categ_choice = categ_select()
-    product_select(categ_choice)
+
+    product_return =product_select(categ_choice)
+    foodname_selected = product_return[0]
+    print(foodname_selected)
+    name_id_list = product_return[1]
+    print(name_id_list)
+    
+    
+    selected_food_id = name_id_list[foodname_selected]
+    print("GO GO GO :", selected_food_id)
     altern_choice = altern_select(categ_choice)
     altern_display(altern_choice)
 
