@@ -52,7 +52,7 @@ ENGINE = InnoDB;
 -- Table `PurBeurre`.`History`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `PurBeurre`.`History` (
-  `history_id` INT NOT NULL,
+  `history_id` INT(0) NOT NULL AUTO_INCREMENT,
   `food_id` INT NULL,
   `surrogate_id` INT NULL,
   PRIMARY KEY (`history_id`),

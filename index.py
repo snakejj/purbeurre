@@ -58,6 +58,7 @@ def filling_category_db(cursor):
             
                 
             print("Categories successfully inserted !")
+            print("Chargement en cours, veuillez patienter ...")
             cnx.commit()
             
         except:
@@ -65,7 +66,7 @@ def filling_category_db(cursor):
             print("Error while inserting categories in DB")
     else:
         print("Categories already in the DB !")
-
+        print("Chargement en cours, veuillez patienter ...")
     
 def sorting_and_filling_product(cursor,category):
 
@@ -76,7 +77,7 @@ def sorting_and_filling_product(cursor,category):
 
     cursor.execute('SELECT category_id FROM Category WHERE category_name = (%s)', (category,))
     numid = cursor.fetchone()
-    print(numid)
+#    print(numid)
 
     cursor.execute('SELECT food_id FROM Food WHERE category_id = (%s)', (numid[0],))
     rows_count = cursor.fetchall()
@@ -99,11 +100,11 @@ def sorting_and_filling_product(cursor,category):
                     cnx.commit()
         except:
             
-            print("EROOOOR") 
+            print("ERREUR") 
      
     else :
-            print("else")       
-    
+#            print("else")       
+        pass
         
 #        else:
 #            print("Incomplet !") 
@@ -207,7 +208,7 @@ def product_select(numcateg):
 
 #        list_product.append(a)
 
-    
+    print("GOGOGO :", result)
     for element in result:
         
 #        print(i, ":", element[0])
@@ -247,26 +248,51 @@ def product_select(numcateg):
 
 def altern_select(numcateg):
 
-    cursor.execute('SELECT food_name FROM Food WHERE category_id = (%s) AND nutriscore IN(SELECT nutriscore FROM Food WHERE nutriscore <= "b") ORDER BY RAND() LIMIT 3 ', (numcateg,))
+    cursor.execute('SELECT food_name, food_id FROM Food WHERE category_id = (%s) AND nutriscore IN(SELECT nutriscore FROM Food WHERE nutriscore <= "b") ORDER BY RAND() LIMIT 3 ', (numcateg,))
     result = cursor.fetchall() 
     
+#    print("Test 1:",result)
+#    print("Test 2:",result[0])
+#    print("Test 3:",result[0][0])
+#    print("Test 4:",result[0][1])
     integ = False
     i = 1
+    j = 1
 #    clean = ["(", ",)"]
-    list_altern = []
+    list_product = []
+    id_list = {}
 
-    for a in result:
-        a = str(a)
+    for a, b in result:
+        id_list.update({a : b})
+
+#    print(id_list)
+#    print("")
+#    print(list_product)
+#    for a in result:
+#        a = str(a)
 #        for i in clean:
 #            a=a.replace(i, "")
 
-        list_altern.append(a)
+#        list_product.append(a)
 
-    list_altern.sort(key=str.lower)
-    print("Voici une liste de 3 produits avec un meilleur nutriscore:")
-    for element in list_altern:
-        print(i, ":", element)    
+    print("GOGOGO :", result)
+    print(id_list)
+    for element in result:
+        
+#        print(i, ":", element[0])
+        list_product.append(element[0])    
         i += 1
+
+    
+    list_product.sort(key=str.lower)
+    for element in list_product:
+        print(j, ":", element)    
+        j += 1
+#    print("COMPLETE PRINT TEST :",list_product)
+
+#    print(list_product)
+
+#    print(display,":",a)
 
     while not integ :
         try:
@@ -275,8 +301,9 @@ def altern_select(numcateg):
             integ = True
             if 0 < altern_choice < 4 :
                 print("")
-                return list_altern[altern_choice-1]
-                
+#                return list_altern[altern_choice-1]
+                product_name = list_product[altern_choice-1]
+                return [product_name, id_list]
             else :
 
                 print("Cette option n'existe pas !")
@@ -286,21 +313,24 @@ def altern_select(numcateg):
             print("La saisie est incorrect, vous devez tapez un chiffre.")
             integ = False
         
-def altern_display(altern_choice):
+def altern_display(selected_food_id):
     
-    altern_choice_str = ''.join(altern_choice)
+#    altern_choice_str = ''.join(altern_choice)
 
-    clean = ["('", "',)"]
-    for i in clean:
-        altern_choice_str=altern_choice_str.replace(i, "")
+#    clean = ["('", "',)"]
+#    for i in clean:
+#        altern_choice_str=altern_choice_str.replace(i, "")
 
-    cursor.execute('SELECT * FROM Food WHERE food_name = (%s)', (altern_choice_str,))
+    cursor.execute('SELECT * FROM Food WHERE food_id = (%s)', (selected_food_id,))
     result = cursor.fetchall()
     
+#    print("\n\n ###################")
+#    print(result)
+#    print(" ###################\n\n ")    
 
     print("Voici la liste des informations pour ce produit :")
     print("")
-    print("Nom du produit :", altern_choice_str)
+    print("Nom du produit :", result[0][2])
     print("Disponible dans ce(s) magasin(s) :", result[0][4])
     print("Lien Open Food Fact :", result[0][5])
     print("Liste des ingredients :", result[0][3])
@@ -319,10 +349,16 @@ def altern_display(altern_choice):
             option_choice = input("Enter le numéro de l'option souhaité : ")    
             option_choice = int(option_choice)
             integ = True
-            if 0 < option_choice < 3 :
-                print("en cours de dev : def save_altern")
-                return option_choice
-           
+            if option_choice == 1 :
+                saving = True
+                return saving
+                
+            elif option_choice == 2 :
+                print("Bonne journée, et à bientôt !")                
+                saving = False
+                return saving                
+                print("Bonne journée, et à bientôt !")
+
             else :
 
                 print("Cette option n'existe pas !")
@@ -333,6 +369,19 @@ def altern_display(altern_choice):
             integ = False
 
 
+def save_history(saving,food_id,surrogate_id):
+
+    if saving == True:
+
+        cursor.execute('INSERT INTO History (food_id,surrogate_id) VALUES ((%s), (%s))',(food_id, surrogate_id,))
+            
+                
+        print("Sauvegarde effectuée avec succès !")
+        cnx.commit()       
+    else :
+
+        pass                
+        
 ################################################################################
 
 ####################################
@@ -409,17 +458,35 @@ if option_choice == 1 :
         
     categ_choice = categ_select()
 
+### PRODUCT SELECT OK
     product_return =product_select(categ_choice)
+    print("01",product_return)
     foodname_selected = product_return[0]
-    print(foodname_selected)
+    print("\n02",foodname_selected)
     name_id_list = product_return[1]
-    print(name_id_list)
-    
-    
+    print("\n03",name_id_list)
     selected_food_id = name_id_list[foodname_selected]
-    print("GO GO GO :", selected_food_id)
-    altern_choice = altern_select(categ_choice)
-    altern_display(altern_choice)
+    print("\n04",selected_food_id,"\n")
+######################################################### 
+
+
+### ALTERN SELECT 
+    altern_return = altern_select(categ_choice)
+    print("\n05", altern_return)
+    altern_foodname_selected = altern_return[0]
+    print("\n06",altern_foodname_selected)
+    altern_name_id_list = altern_return[1]
+    print("\n07",altern_name_id_list)
+    altern_selected_food_id = altern_name_id_list[altern_foodname_selected]
+    print("\n08",altern_selected_food_id,"\n")
+######################################################### 
+
+### ALTERN DISPLAY 
+    savingdb = altern_display(altern_selected_food_id)
+######################################################### 
+ 
+### SAVE HISTORY
+    save_history(savingdb,selected_food_id,altern_selected_food_id)
 
           
 elif option_choice == 2 :
