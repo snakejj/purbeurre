@@ -1,2 +1,5 @@
-M_user = 'purbeurre'
-M_password = 'openfoodfact'
+USER = 'purbeurre'
+PASSWORD = 'openfoodfact'
+HOST = 'localhost'
+DB_NAME = 'PurBeurre'
+AUTH_PLUGIN = 'mysql_native_password'

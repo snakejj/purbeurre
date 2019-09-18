@@ -14,8 +14,8 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema PurBeurre
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `PurBeurre` ;
-USE `PurBeurre` ;
+-- CREATE SCHEMA IF NOT EXISTS `PurBeurre` ;
+-- USE `PurBeurre` ;
 
 -- -----------------------------------------------------
 -- Table `PurBeurre`.`Category`
