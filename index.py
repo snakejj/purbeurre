@@ -1,15 +1,28 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
+# -tc- ajouter une docstring de module
+
 import requests
 import json
 import mysql.connector
+# -tc- éviter les modules avec des majuscules et des _
 from config import M_user,M_password
+
+# -tc- éviter de structurer un projet python sur un seul module. Chaque partie
+# -tc- de l'application doit aller dans son propre module.
+
+# -tc- Le projet doit être structuré selon une logique orientée objet
 
 ########################
 
+# -tc- REFACTORING n°1: séparer le code client et la création de la base de 
+# -tc- données
 
+
+# -tc- dans une classe Database
 def execute_sql_from_file(cursor,filename):
+    """Ajouter une doctring"""
     # Open and read the file as a single buffer
     fd = open(filename, 'r')
     sqlFile = fd.read()
@@ -36,8 +49,9 @@ def execute_sql_from_file(cursor,filename):
         cursor.execute(command)
     
 
+# -tc- Utiliser une classe CategoryManager
 def filling_category_db(cursor):
-    
+    """Ajouter une doctring"""
 
     
     cursor.execute("""SELECT * FROM Category""")
@@ -68,8 +82,10 @@ def filling_category_db(cursor):
         print("Categories already in the DB !")
         print("Chargement en cours, veuillez patienter ...")
     
+# -tc- Utiliser une classe ProductManager. Différencier les opérations de 
+# -tc- remplissage et de tri
 def sorting_and_filling_product(cursor,category):
-
+    """Ajouter une doctring"""
     
     
     response = requests.get("https://fr.openfoodfacts.org/cgi/search.pl?search_terms2={}&action=process&json=1&page_size=100".format(category))
@@ -103,6 +119,8 @@ def sorting_and_filling_product(cursor,category):
             print("ERREUR") 
      
     else :
+        # -tc- à quoi servent ces print()? Ce n'est pas une bonne idée 
+        # -tc- d'utiliser des print() pour débugger.
 #            print("else")       
         pass
         
@@ -110,7 +128,13 @@ def sorting_and_filling_product(cursor,category):
 #            print("Incomplet !") 
         
 
+# -tc- A partir d'ici, on est dans le code client. Créer une classe Client et
+# -tc- transformer les fonctions qui suivent en méthodes de cette classe.
+# -tc- Les méthodes du client ne doivent pas utiliser de code SQL directement.
+# -tc- Créer des classes ProductManager(), CategoryManager(), FavoriteManager()
+# -tc- pour cela.
 def option_select():
+    """Ajouter une doctring"""
     
     print("""
 
@@ -150,6 +174,7 @@ def option_select():
     
 
 def categ_select():
+    """Ajouter une doctring"""
 
     cursor.execute('SELECT * FROM Category')
     result = cursor.fetchall()
@@ -178,8 +203,9 @@ def categ_select():
             integ = False
 
         
-
+# -tc- Attention aux fonctions longues. On ne devrait pas dépasser 20 lignes
 def product_select(numcateg):
+    """Ajouter une doctring"""
 
     cursor.execute('SELECT food_name, food_id FROM Food WHERE category_id = (%s) AND nutriscore >= "c" ORDER BY RAND() LIMIT 10 ', (numcateg,))
     result = cursor.fetchall()
@@ -247,6 +273,7 @@ def product_select(numcateg):
             integ = False
 
 def altern_select(numcateg):
+    """Ajouter une doctring"""
 
     cursor.execute('SELECT food_name, food_id FROM Food WHERE category_id = (%s) AND nutriscore IN(SELECT nutriscore FROM Food WHERE nutriscore <= "b") ORDER BY RAND() LIMIT 3 ', (numcateg,))
     result = cursor.fetchall() 
@@ -314,6 +341,7 @@ def altern_select(numcateg):
             integ = False
         
 def altern_display(selected_food_id):
+    """Ajouter une doctring"""
     
 #    altern_choice_str = ''.join(altern_choice)
 
@@ -370,6 +398,7 @@ def altern_display(selected_food_id):
 
 
 def save_history(saving,food_id,surrogate_id):
+    """Ajouter une doctring"""
 
     if saving == True:
 
@@ -382,6 +411,7 @@ def save_history(saving,food_id,surrogate_id):
 
 
 def history_display():
+    """Ajouter une doctring"""
     
     cursor.execute('SELECT history_id FROM History LIMIT 10')
     idlen = cursor.fetchall()
@@ -437,6 +467,7 @@ def history_display():
             integ = False
 
 def history_details(old_id, new_id):
+    """Ajouter une doctring"""
 
     cursor.execute('SELECT * FROM Food WHERE food_id = (%s)', (old_id,))
     old = cursor.fetchall()
@@ -521,6 +552,7 @@ except mysql.connector.Error as error:
 # MAIN
 ####################################   
 
+# -tc- Si c'est la partie principale, créer une fonction main()
 
 if connected :
     filling_category_db(cursor)
