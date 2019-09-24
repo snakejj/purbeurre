@@ -5,7 +5,7 @@
 
 import mysql.connector
 # -tc- éviter les majuscules et les _ dans les noms de modules
-from config import M_user, M_password
+from config import USER, PASSWORD
 
 
 # -tc- Toujours créer des fonctions ou des classes pour avoir un meilleur
@@ -15,8 +15,8 @@ def main():
     try:
         conn = mysql.connector.connect(
             host='localhost',
-            user=M_user,
-            password=M_password,
+            user=USER,
+            password=PASSWORD,
             auth_plugin='mysql_native_password'
         )
 
