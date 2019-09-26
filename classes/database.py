@@ -81,7 +81,7 @@ class Database:
 
         except:
             pass
-        
+
     def execute_sql_from_file(self, filename):
         """Ajouter une doctring"""
         # Open and read the file as a single buffer
@@ -137,7 +137,7 @@ class CategoryManager:
 
                 print("Categories successfully inserted !")
                 print("Chargement en cours, veuillez patienter ...")
-                cnx.commit()
+                self.database.cnx.commit()
 
             except:
 
@@ -168,7 +168,7 @@ class CategoryManager:
 
                 print("Categories successfully inserted !")
                 print("Chargement en cours, veuillez patienter ...")
-                cnx.commit()
+                self.database.cnx.commit()
 
             except:
 
@@ -214,8 +214,10 @@ class FoodManager:
 
     def sorting_and_filling(self,category):
         """Ajouter une doctring"""
-        
+
         cursor = self.database.get_cursor()
+        
+        
         response = requests.get(
             "https://fr.openfoodfacts.org/cgi/search.pl?search_terms2={}&action=process&json=1&page_size=100".format(category))
         result = json.loads(response.text)
@@ -242,8 +244,8 @@ class FoodManager:
                         cursor.execute("INSERT INTO Food (category_id, food_name, ingredients_text, store, off_link, nutriscore) VALUES (%s, %s, %s, %s, %s, %s)", (
                             numid[0], p['product_name_fr'], p['ingredients_text_fr'], p['stores'], p['url'], p['nutrition_grades_tags'][0], ))
 
-                        cnx.commit()
-            except:
+                        self.database.cnx.commit()
+            except TypeError:
 
                 print("ERREUR")
 
@@ -556,4 +558,4 @@ class HistoryManager:
                 'INSERT INTO History (food_id,surrogate_id) VALUES ((%s), (%s))', (food_id, surrogate_id,))
 
             print("Sauvegarde effectuée avec succès !")
-            cnx.commit()
+            self.database.cnx.commit()
