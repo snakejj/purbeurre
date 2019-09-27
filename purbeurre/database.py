@@ -199,12 +199,12 @@ class FoodManager:
         if not rows_count:
             try:
                 for p in result['products']:
-                    if (p['code']
-                            and 4 < len(p['product_name_fr']) < 80
-                            and len(p['url']) < 255
-                            and 1 < len(p['stores']) < 150
-                            and p['ingredients_text_fr']
-                            and len(p['nutrition_grades_tags'][0]) == 1):
+                    if (p.get('code', "") and
+                        4 < len(p.get('product_name_fr', "")) < 80 and
+                        len(p.get('url', "")) < 255 and
+                        1 < len(p.get('stores', "")) < 150 and
+                        p.get('ingredients_text_fr', "") and
+                            len(p.get('nutrition_grades_tags', "")[0]) == 1):
 
                         cursor.execute(
                             """
@@ -230,7 +230,7 @@ class FoodManager:
                     else:
                         pass
 
-            except NameError:
+            except KeyError:
 
                 print(
                     "Erreur lors de l'insertion des produits en base de"
