@@ -1,16 +1,14 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-# -tc- Mettre une docstring de module ici
+""" """
 
 import mysql.connector
-# -tc- éviter les majuscules et les _ dans les noms de modules
+
 from config import USER, PASSWORD
 
 
-# -tc- Toujours créer des fonctions ou des classes pour avoir un meilleur
-# -tc- contrôle sur l'exécution. Simplification: jamais de code directement
-# -tc- au niveau global du script
+
 def main():
     try:
         conn = mysql.connector.connect(
@@ -23,7 +21,7 @@ def main():
         cursor = conn.cursor()
 
         # Delete record now
-        # -tc- Attention, pas de majuscule dans les noms de variables!
+
         sql_delete_query = """DROP database PurBeurre"""
         cursor.execute(sql_delete_query)
 
