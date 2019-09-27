@@ -111,10 +111,10 @@ class CategoryManager:
                                 ('Snacks'),
                                 ('Produits laitiers');""")
 
+                print("Chargement en cours...")
                 print(
-                    "Chargement en cours...\n"
                     "Le chargement peut prendre quelques minutes, merci de"
-                    "patienter"
+                    " patienter."
                     )
                 self.database.cnx.commit()
 
@@ -125,10 +125,10 @@ class CategoryManager:
                     "base de données"
                 )
         else:
+            print("Chargement en cours...")
             print(
-                    "Chargement en cours...\n"
-                    "Le chargement peut prendre quelques minutes, merci de "
-                    "patienter."
+                "Le chargement peut prendre quelques minutes, merci de"
+                " patienter."
                 )
 
     def categ_select(self):
