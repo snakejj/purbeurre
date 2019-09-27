@@ -82,7 +82,6 @@ class Database:
 
         try:
             execute_sql_from_file(cursor, "sql_script_purbeurre.sql")
-            print("TRYYYYYYYYY")
         except NameError:
             pass
 
