@@ -65,9 +65,9 @@ def main():
         history_manager.save_history(
             savingdb, selected_food_id, altern_selected_food_id
         )
+    #########################################################
 
     elif option_choice == 2:
-
         history_id_tuple = history_manager.history_display()
         oldnew_id = history_id_tuple[1]
         surr_old_id = oldnew_id[0]

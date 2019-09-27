@@ -149,11 +149,9 @@ class CategoryManager:
                 categ_choice = int(categ_choice)
                 integ = True
                 if 0 < categ_choice < 6:
-
                     return categ_choice
 
                 else:
-
                     print("Cette option n'existe pas !")
                     integ = False
 
@@ -238,7 +236,6 @@ class FoodManager:
                         pass
 
             except KeyError:
-
                 print(
                     "Erreur lors de l'insertion des produits en base de"
                     "données"
@@ -290,7 +287,6 @@ class FoodManager:
                     return [product_name, id_list]
 
                 else:
-
                     print("Cette option n'existe pas !")
                     integ = False
 
@@ -396,7 +392,6 @@ class FoodManager:
                     return saving
 
                 else:
-
                     print("Cette option n'existe pas !")
                     integ = False
 
@@ -468,10 +463,12 @@ class HistoryManager:
                 SELECT food_name FROM Food WHERE food_id = (%s)""", (b,)
                 )
             old = cursor.fetchone()
+
             cursor.execute(
                 """SELECT food_name FROM Food WHERE food_id = (%s)""", (c,)
                 )
             new = cursor.fetchone()
+
             id_list.update({i: a})
             food_id_oldnew.append([b, c])
             print(i, ":", old[0], "->", new[0])
@@ -493,7 +490,6 @@ class HistoryManager:
                     return true_id, oldnew_id
 
                 else:
-
                     print("Cette option n'existe pas !")
                     integ = False
 

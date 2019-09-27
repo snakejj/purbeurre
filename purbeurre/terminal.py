@@ -27,11 +27,9 @@ class Terminal:
                 option_choice = int(option_choice)
                 self.integ = True
                 if 0 < option_choice < 4:
-
                     return option_choice
 
                 else:
-
                     print("Cette option n'existe pas !")
                     self.integ = False
 
