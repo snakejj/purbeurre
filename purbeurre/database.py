@@ -112,7 +112,11 @@ class CategoryManager:
                                 ('Snacks'),
                                 ('Produits laitiers');""")
 
-                print("Chargement en cours, veuillez patienter ...")
+                print(
+                    "Chargement en cours...\n"
+                    "Le chargement peut prendre quelques minutes, merci de"
+                    "patienter"
+                    )
                 self.database.cnx.commit()
 
             except NameError:
@@ -122,7 +126,11 @@ class CategoryManager:
                     "base de données"
                 )
         else:
-            print("Chargement en cours, veuillez patienter ....")
+            print(
+                    "Chargement en cours...\n"
+                    "Le chargement peut prendre quelques minutes, merci de "
+                    "patienter."
+                )
 
     def categ_select(self):
         """Funtion which displays the differents categories and asks to select
@@ -238,7 +246,7 @@ class FoodManager:
                     )
 
         else:
-            print("DB already full")
+            pass
 
     def product_select(self, numcateg):
         """Function which displays 10 products randomly from the database,
