@@ -175,7 +175,7 @@ class FoodManager:
         data = {
             "action": "process",
             "json": 1,
-            "page_size": 100,
+            "page_size": 1000,
             "tagtype_0": "categories",
             "tag_contains_0": "contains",
             "tag_0": category,
