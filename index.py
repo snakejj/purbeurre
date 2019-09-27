@@ -1,7 +1,8 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-"""Module which defines all classes and functions related to the database."""
+"""This Module is the main one of the program, which contain the main function
+which calls them all"""
 
 from purbeurre.database import Database, CategoryManager
 from purbeurre.database import FoodManager, HistoryManager
