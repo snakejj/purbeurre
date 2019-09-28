@@ -4,3 +4,4 @@ __pycache__/
 doandundodb/
 Pipfile
 Pipfile.lock
+.gitignore
