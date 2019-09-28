@@ -1,12 +1,11 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-""" """
+""" Module which allows to erase the database """
 
 import mysql.connector
 
 from config import USER, PASSWORD
-
 
 
 def main():
@@ -28,17 +27,16 @@ def main():
         # Save (commit) the changes
         conn.commit()
 
-        print("Database PurBeurre was Deleted successfully ")
+        print("La base de données PurBeurre a été effacée avec succées ")
 
-    except mysql.connector.Error as error:
-        print("Failed to Delete Database: {}".format(error))
+    except mysql.connector.Error:
+        print("Impossible d'effacer la base de données car elle n'existe pas")
 
     finally:
         # closing database connection.
         if (conn.is_connected()):
             cursor.close()
             conn.close()
-            print("MySQL connection is closed")
 
 
 if __name__ == "__main__":
