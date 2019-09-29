@@ -8,7 +8,7 @@ import json
 import mysql.connector
 import sys
 
-from database.config import USER, PASSWORD, HOST, DB_NAME, AUTH_PLUGIN
+from database.configdb import USER, PASSWORD, HOST, DB_NAME, AUTH_PLUGIN
 
 
 class Database:
@@ -52,7 +52,7 @@ class Database:
     def connect(self):
         """Method which try to connect to database, if it can't it will ask
         to create the database and to put the credentials in the file
-        config.py , located in the subfolder "database" """
+        configdb.py , located in the subfolder "database" """
 
         self.connected = True
 
@@ -75,7 +75,7 @@ class Database:
                 "Impossible de se connecter à la base de données : "
                 "La base de données n'existe pas.\n"
                 "Merci de créer une base de données et d'editer le fichier "
-                "config.py, present dans le sous dossier 'database' avec "
+                "configdb.py, present dans le sous dossier 'database' avec "
                 "les differentes informations de connexion !\n"
             )
 

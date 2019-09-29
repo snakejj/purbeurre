@@ -5,7 +5,7 @@
 
 import mysql.connector
 
-from config import USER, PASSWORD
+from configdb import USER, PASSWORD
 
 
 def main():

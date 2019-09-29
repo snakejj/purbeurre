@@ -5,7 +5,7 @@
 
 import mysql.connector
 
-from config import USER, PASSWORD, HOST, DB_NAME, AUTH_PLUGIN
+from configdb import USER, PASSWORD, HOST, DB_NAME, AUTH_PLUGIN
 
 
 def execute_sql(cursor):
