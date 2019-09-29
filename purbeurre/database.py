@@ -8,7 +8,7 @@ import json
 import mysql.connector
 import sys
 
-import config
+from database.config import USER, PASSWORD, HOST, DB_NAME, AUTH_PLUGIN
 
 
 class Database:
@@ -23,7 +23,7 @@ class Database:
         """Method which returns the cursor"""
         if not self.connected:
             self.connect()
-            self.execute_sql_from_file("sql_script_purbeurre.sql")
+            self.execute_sql_from_file("database/sql_script_purbeurre.sql")
         return self.cnx.cursor()
 
     def execute_sql_from_file(self, filename):
@@ -52,7 +52,7 @@ class Database:
     def connect(self):
         """Method which try to connect to database, if it can't it will ask
         to create the database and to put the credentials in the file
-        config.py."""
+        config.py , located in the subfolder "database" """
 
         self.connected = True
 
@@ -60,11 +60,11 @@ class Database:
             print("\nConnexion à la base de données ... \n")
 
             self.cnx = mysql.connector.connect(
-                user=config.USER,
-                password=config.PASSWORD,
-                host=config.HOST,
-                db=config.DB_NAME,
-                auth_plugin=config.AUTH_PLUGIN
+                user=USER,
+                password=PASSWORD,
+                host=HOST,
+                db=DB_NAME,
+                auth_plugin=AUTH_PLUGIN
             )
 
             print("Connexion effectué avec succès !\n")
@@ -75,7 +75,8 @@ class Database:
                 "Impossible de se connecter à la base de données : "
                 "La base de données n'existe pas.\n"
                 "Merci de créer une base de données et d'editer le fichier "
-                "config.py avec les differentes informations de connexion !\n"
+                "config.py, present dans le sous dossier 'database' avec "
+                "les differentes informations de connexion !\n"
             )
 
             sys.exit()

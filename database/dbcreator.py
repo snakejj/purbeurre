@@ -8,19 +8,23 @@ import mysql.connector
 from config import USER, PASSWORD, HOST, DB_NAME, AUTH_PLUGIN
 
 
-def execute_sql_from_file(cursor, filename):
-    """Ajouter une doctring"""
-    # Open and read the file as a single buffer
-    fd = open(filename, 'r')
-    sqlFile = fd.read()
-    fd.close()
+def execute_sql(cursor):
+    """Method which execute SQL requests"""
+    # Open and read the requests as a single buffer
+    sqlrequests = """
+    CREATE SCHEMA IF NOT EXISTS `PurBeurre` ;
+    USE `PurBeurre` ;
+        """
 
     # Get rid of commentary and ends-lines
-    sqlFile = "".join(line for line in sqlFile.split("\n")
-                      if not line.startswith('--'))
+    sqlrequests = "".join(
+        line for line in sqlrequests.split("\n") if not line.startswith('--')
+        )
 
     # Get rid of empty lines
-    sqlCommands = [line.strip() for line in sqlFile.split(";") if line.strip()]
+    sqlCommands = [
+        line.strip() for line in sqlrequests.split(";") if line.strip()
+        ]
 
     # Execute every command from the input file
     for command in sqlCommands:
@@ -60,7 +64,7 @@ except mysql.connector.Error as error:
     cursor = cnx.cursor()
 
     try:
-        execute_sql_from_file(cursor, "createdb.sql")
+        execute_sql(cursor)
         print("Base de données crées avec succès !\n")
 
     except NameError:
