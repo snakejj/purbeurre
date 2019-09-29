@@ -37,39 +37,49 @@ def execute_sql(cursor):
 ####################################
 
 
-try:
-
-    print("\nVerification de l'existance de la base de données ...\n")
-
-    cnx = mysql.connector.connect(user=USER,
-                                  password=PASSWORD,
-                                  host=HOST,
-                                  db=DB_NAME,
-                                  auth_plugin=AUTH_PLUGIN)
-
-    print("La base de données existe déja !\n")
-    cursor = cnx.cursor()
-
-except mysql.connector.Error as error:
-
-    print(
-        "La base de données n'existe pas\n"
-        "Creation de la base de données ...\n"
-        )
-    cnx = mysql.connector.connect(user=USER,
-                                  password=PASSWORD,
-                                  host=HOST,
-                                  auth_plugin=AUTH_PLUGIN)
-
-    cursor = cnx.cursor()
+def main():
 
     try:
-        execute_sql(cursor)
-        print("Base de données crées avec succès !\n")
 
-    except NameError:
+        print("\nVerification de l'existance de la base de données ...\n")
+
+        cnx = mysql.connector.connect(
+            user=USER,
+            password=PASSWORD,
+            host=HOST,
+            db=DB_NAME,
+            auth_plugin=AUTH_PLUGIN
+            )
+
+        print("La base de données existe déja !\n")
+        cursor = cnx.cursor()
+
+    except mysql.connector.Error:
 
         print(
-            "Erreur lors de la création de la base de données,"
-            " merci de contacter un administrateur."
-        )
+            "La base de données n'existe pas\n"
+            "Creation de la base de données ...\n"
+            )
+        cnx = mysql.connector.connect(
+            user=USER,
+            password=PASSWORD,
+            host=HOST,
+            auth_plugin=AUTH_PLUGIN
+            )
+
+        cursor = cnx.cursor()
+
+        try:
+            execute_sql(cursor)
+            print("Base de données crées avec succès !\n")
+
+        except NameError:
+
+            print(
+                "Erreur lors de la création de la base de données,"
+                " merci de contacter un administrateur."
+            )
+
+
+if __name__ == "__main__":
+    main()
