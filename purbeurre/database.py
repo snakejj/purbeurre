@@ -480,7 +480,7 @@ class HistoryManager:
                 i += 1
 
             integ = False
-            
+
             while not integ:
                 try:
                     categ_choice = input(
