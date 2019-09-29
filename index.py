@@ -27,11 +27,20 @@ def main():
     terminal = Terminal()
 
     category_manager.filling_category()
-    food_manager.sorting_and_filling("Yaourts")
-    food_manager.sorting_and_filling("Chocolats")
-    food_manager.sorting_and_filling("Boissons")
-    food_manager.sorting_and_filling("Snacks")
-    food_manager.sorting_and_filling("Produits laitiers")
+    food_manager.isdbempty()
+    if food_manager.dbempty:
+        print(
+            "\nLa base de données est vide, remplissage en cours.\n"
+            "L'operation peut prendre quelques minutes, merci de"
+            " patienter."
+                )
+        food_manager.sorting_and_filling("Yaourts")
+        food_manager.sorting_and_filling("Chocolats")
+        food_manager.sorting_and_filling("Boissons")
+        food_manager.sorting_and_filling("Snacks")
+        food_manager.sorting_and_filling("Produits laitiers")
+    else:
+        pass
 
     ####################################
     # TERMINAL INTERFACE

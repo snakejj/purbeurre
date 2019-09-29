@@ -113,10 +113,6 @@ class CategoryManager:
                                 ('Produits laitiers');""")
 
                 print("Chargement en cours...")
-                print(
-                    "Le chargement peut prendre quelques minutes, merci de"
-                    " patienter."
-                    )
                 self.database.cnx.commit()
 
             except NameError:
@@ -127,10 +123,6 @@ class CategoryManager:
                 )
         else:
             print("Chargement en cours...")
-            print(
-                "Le chargement peut prendre quelques minutes, merci de"
-                " patienter."
-                )
 
     def categ_select(self):
         """Funtion which displays the differents categories and asks to select
@@ -167,6 +159,21 @@ class FoodManager:
     def __init__(self, database):
         """Initialization's method of the FoodManager's class"""
         self.database = database
+        self.dbempty = True
+
+    def isdbempty(self):
+
+        cursor = self.database.get_cursor()
+
+        cursor.execute(
+            'SELECT food_id FROM Food'
+            )
+        rows_count = cursor.fetchall()
+
+        if not rows_count:
+            pass
+        else:
+            self.dbempty = False
 
     def sorting_and_filling(self, category):
         """Funtion which make the api request, put all the datas in a variable,
@@ -197,53 +204,44 @@ class FoodManager:
             )
         numid = cursor.fetchone()
 
-        cursor.execute(
-            'SELECT food_id FROM Food WHERE category_id = (%s)', (numid[0],)
-            )
-        rows_count = cursor.fetchall()
+        try:
+            for p in result['products']:
+                if (p.get('code', "") and
+                    4 < len(p.get('product_name_fr', "")) < 80 and
+                    len(p.get('url', "")) < 255 and
+                    1 < len(p.get('stores', "")) < 150 and
+                    p.get('ingredients_text_fr', "") and
+                        len(p.get('nutrition_grades_tags', "")[0]) == 1):
 
-        if not rows_count:
-            try:
-                for p in result['products']:
-                    if (p.get('code', "") and
-                        4 < len(p.get('product_name_fr', "")) < 80 and
-                        len(p.get('url', "")) < 255 and
-                        1 < len(p.get('stores', "")) < 150 and
-                        p.get('ingredients_text_fr', "") and
-                            len(p.get('nutrition_grades_tags', "")[0]) == 1):
-
-                        cursor.execute(
-                            """
-                            INSERT INTO Food (
-                                category_id,
-                                food_name,
-                                ingredients_text,
-                                store,
-                                off_link,
-                                nutriscore
-                                )
-                            VALUES (%s, %s, %s, %s, %s, %s)""", (
-                                numid[0],
-                                p['product_name_fr'],
-                                p['ingredients_text_fr'],
-                                p['stores'],
-                                p['url'],
-                                p['nutrition_grades_tags'][0],
-                                )
+                    cursor.execute(
+                        """
+                        INSERT INTO Food (
+                            category_id,
+                            food_name,
+                            ingredients_text,
+                            store,
+                            off_link,
+                            nutriscore
                             )
+                        VALUES (%s, %s, %s, %s, %s, %s)""", (
+                            numid[0],
+                            p['product_name_fr'],
+                            p['ingredients_text_fr'],
+                            p['stores'],
+                            p['url'],
+                            p['nutrition_grades_tags'][0],
+                            )
+                        )
 
-                        self.database.cnx.commit()
-                    else:
-                        pass
+                    self.database.cnx.commit()
+                else:
+                    pass
 
-            except KeyError:
-                print(
-                    "Erreur lors de l'insertion des produits en base de"
-                    "données"
-                    )
-
-        else:
-            pass
+        except KeyError:
+            print(
+                "Erreur lors de l'insertion des produits en base de"
+                "données"
+                )
 
     def product_select(self, numcateg):
         """Function which displays 10 products randomly from the database,
