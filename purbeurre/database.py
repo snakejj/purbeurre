@@ -440,7 +440,6 @@ class HistoryManager:
         cursor.execute('SELECT history_id FROM History LIMIT 10')
         idlen = cursor.fetchall()
         last = len(idlen)
-        print(last)
 
         cursor.execute(
             """
@@ -453,48 +452,57 @@ class HistoryManager:
         id_list = {}
         food_id_oldnew = []
 
-        print("\nVoici la liste de(s)", last, "derniere(s) substitution(s)")
+        if last == 0:
+            print("Aucune substitution n'est enregistré pour le moment !\n")
+            sys.exit()
 
-        for a, b, c in result:
-
-            cursor.execute(
-                """
-                SELECT food_name FROM Food WHERE food_id = (%s)""", (b,)
+        else:
+            print(
+                "\nVoici la liste de(s)", last, "derniere(s) substitution(s)"
                 )
-            old = cursor.fetchone()
 
-            cursor.execute(
-                """SELECT food_name FROM Food WHERE food_id = (%s)""", (c,)
-                )
-            new = cursor.fetchone()
+            for a, b, c in result:
 
-            id_list.update({i: a})
-            food_id_oldnew.append([b, c])
-            print(i, ":", old[0], "->", new[0])
-            i += 1
-
-        integ = False
-
-        while not integ:
-            try:
-                categ_choice = input(
-                    "Enter le n° de la substitution souhaité : "
+                cursor.execute(
+                    """
+                    SELECT food_name FROM Food WHERE food_id = (%s)""", (b,)
                     )
-                categ_choice = int(categ_choice)
-                integ = True
-                if 0 < categ_choice <= i:
+                old = cursor.fetchone()
 
-                    oldnew_id = food_id_oldnew[categ_choice-1]
-                    true_id = id_list[categ_choice]
-                    return true_id, oldnew_id
+                cursor.execute(
+                    """SELECT food_name FROM Food WHERE food_id = (%s)""", (c,)
+                    )
+                new = cursor.fetchone()
 
-                else:
-                    print("Cette option n'existe pas !")
+                id_list.update({i: a})
+                food_id_oldnew.append([b, c])
+                print(i, ":", old[0], "->", new[0])
+                i += 1
+
+            integ = False
+            
+            while not integ:
+                try:
+                    categ_choice = input(
+                        "Enter le n° de la substitution souhaité : "
+                        )
+                    categ_choice = int(categ_choice)
+                    integ = True
+                    if 0 < categ_choice < i:
+
+                        oldnew_id = food_id_oldnew[categ_choice-1]
+                        true_id = id_list[categ_choice]
+                        return true_id, oldnew_id
+
+                    else:
+                        print("Cette option n'existe pas !")
+                        integ = False
+
+                except ValueError:
+                    print(
+                        "La saisie est incorrect, vous devez tapez un chiffre."
+                        )
                     integ = False
-
-            except ValueError:
-                print("La saisie est incorrect, vous devez tapez un chiffre.")
-                integ = False
 
     def save_history(self, saving, food_id, surrogate_id):
         """Functions which inserts informations about the food and surrogate"""

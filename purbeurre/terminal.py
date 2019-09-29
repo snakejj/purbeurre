@@ -15,7 +15,7 @@ class Terminal:
     def option_select(self):
         """Funtion which displays main options"""
 
-        print("##############################################################")
+        print("\n############################################################")
 
         print("1 - Quel aliment souhaitez-vous remplacer ?")
         print("2 - Retrouver mes aliments substitués.")
