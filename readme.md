@@ -8,9 +8,9 @@ product.
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to 
 install all the dependencies. Here are the steps :
 
-1.open the command prompt.
-2.cd to the directory where requirements.txt is located.
-3.run this command in your shell:
+1. Open the command prompt.  
+2. cd to the directory where requirements.txt is located.  
+3. Run this command in your shell:  
 
 ```bash
 pip install -r requirements.txt
@@ -21,17 +21,17 @@ pip install -r requirements.txt
 Edit the "configdb.py", located in the subfolder "database", with all the 
 informations related to the database, knowingly :
 
-USER : the username 
-PASSWORD : the password
-HOST : the host
-DB_NAME : the database name
-AUTH_PLUGIN : the Authentication Plugin
+USER : the username   
+PASSWORD : the password  
+HOST : the host  
+DB_NAME : the database name  
+AUTH_PLUGIN : the Authentication Plugin  
 
 ## Start the script
 
-1.open the command prompt.
-2.cd to the directory where index.py is located.
-3.run this command in your shell:
+1. Open the command prompt.  
+2. cd to the directory where index.py is located.  
+3. Run this command in your shell:
 
 ```bash
 python3 index.py
