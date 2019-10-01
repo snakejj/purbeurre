@@ -146,11 +146,17 @@ class CategoryManager:
                     return categ_choice
 
                 else:
-                    print("Cette option n'existe pas !")
+                    print("Cette option n'existe pas !\n")
+                    for a, b in result:
+                        print(a, ":", b)
                     integ = False
 
             except ValueError:
-                print("La saisie est incorrect, vous devez tapez un chiffre.")
+                print(
+                    "La saisie est incorrect, vous devez tapez un chiffre.\n"
+                    )
+                for a, b in result:
+                    print(a, ":", b)
                 integ = False
 
 
@@ -287,11 +293,21 @@ class FoodManager:
                     return [product_name, id_list]
 
                 else:
-                    print("Cette option n'existe pas !")
+                    print("Cette option n'existe pas !\n")
+                    k = 1
+                    for element in list_product:
+                        print(k, ":", element)
+                        k += 1
                     integ = False
 
             except ValueError:
-                print("La saisie est incorrect, vous devez tapez un chiffre.")
+                print(
+                    "La saisie est incorrect, vous devez tapez un chiffre.\n"
+                    )
+                k = 1
+                for element in list_product:
+                    print(k, ":", element)
+                    k += 1
                 integ = False
 
     def altern_select(self, numcateg):
@@ -344,12 +360,21 @@ class FoodManager:
                     return [product_name, id_list]
 
                 else:
-
-                    print("Cette option n'existe pas !")
+                    print("Cette option n'existe pas !\n")
+                    k = 1
+                    for element in list_product:
+                        print(k, ":", element)
+                        k += 1
                     integ = False
 
             except ValueError:
-                print("La saisie est incorrect, vous devez tapez un chiffre.")
+                print(
+                    "La saisie est incorrect, vous devez tapez un chiffre.\n"
+                    )
+                k = 1
+                for element in list_product:
+                    print(k, ":", element)
+                    k += 1
                 integ = False
 
     def altern_display(self, selected_food_id):
@@ -392,11 +417,19 @@ class FoodManager:
                     return saving
 
                 else:
-                    print("Cette option n'existe pas !")
+                    print("Cette option n'existe pas !\n")
+                    print("\nSouhaitez vous sauvegarder cette alternative ?")
+                    print("1 - Oui")
+                    print("2 - Non")
                     integ = False
 
             except ValueError:
-                print("La saisie est incorrect, vous devez tapez un chiffre.")
+                print(
+                    "La saisie est incorrect, vous devez tapez un chiffre.\n"
+                    )
+                print("\nSouhaitez vous sauvegarder cette alternative ?")
+                print("1 - Oui")
+                print("2 - Non")
                 integ = False
 
 
@@ -496,13 +529,59 @@ class HistoryManager:
                         return true_id, oldnew_id
 
                     else:
-                        print("Cette option n'existe pas !")
+                        print("Cette option n'existe pas !\n")
+                        print(
+                            "\nVoici la liste de(s)",
+                            last,
+                            "derniere(s) substitution(s)"
+                            )
+                        k = 1
+                        for a, b, c in result:
+
+                            cursor.execute(
+                                """
+                                SELECT food_name
+                                FROM Food WHERE food_id = (%s)""", (b,)
+                                )
+                            old = cursor.fetchone()
+
+                            cursor.execute(
+                                """SELECT food_name
+                                FROM Food WHERE food_id = (%s)""", (c,)
+                                )
+                            new = cursor.fetchone()
+
+                            print(k, ":", old[0], "->", new[0])
+                            k += 1
                         integ = False
 
                 except ValueError:
                     print(
                         "La saisie est incorrect, vous devez tapez un chiffre."
                         )
+                    print(
+                        "\nVoici la liste de(s)",
+                        last,
+                        "derniere(s) substitution(s)"
+                        )
+                    k = 1
+                    for a, b, c in result:
+
+                        cursor.execute(
+                            """
+                            SELECT food_name
+                            FROM Food WHERE food_id = (%s)""", (b,)
+                            )
+                        old = cursor.fetchone()
+
+                        cursor.execute(
+                            """SELECT food_name
+                            FROM Food WHERE food_id = (%s)""", (c,)
+                            )
+                        new = cursor.fetchone()
+
+                        print(k, ":", old[0], "->", new[0])
+                        k += 1
                     integ = False
 
     def save_history(self, saving, food_id, surrogate_id):

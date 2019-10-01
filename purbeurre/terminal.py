@@ -30,9 +30,17 @@ class Terminal:
                     return option_choice
 
                 else:
-                    print("Cette option n'existe pas !")
+                    print("Cette option n'existe pas !\n")
+                    print("1 - Quel aliment souhaitez-vous remplacer ?")
+                    print("2 - Retrouver mes aliments substitués.")
+                    print("3 - Quitter !")
                     self.integ = False
 
             except ValueError:
-                print("La saisie est incorrect, vous devez tapez un chiffre.")
+                print(
+                    "La saisie est incorrect, vous devez tapez un chiffre.\n"
+                    )
+                print("1 - Quel aliment souhaitez-vous remplacer ?")
+                print("2 - Retrouver mes aliments substitués.")
+                print("3 - Quitter !")
                 self.integ = False
