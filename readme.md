@@ -26,6 +26,8 @@ PASSWORD : the password
 HOST : the host  
 DB_NAME : the database name  
 AUTH_PLUGIN : the Authentication Plugin  
+PORT : the port through which the connection to the database will go
+(3306 by default)
 
 ## Create/Delete the database :
 

@@ -5,7 +5,7 @@
 
 import mysql.connector
 
-from configdb import USER, PASSWORD, HOST, DB_NAME, AUTH_PLUGIN
+from configdb import USER, PASSWORD, HOST, DB_NAME, AUTH_PLUGIN, PORT
 
 
 def main():
@@ -14,7 +14,8 @@ def main():
             host=HOST,
             user=USER,
             password=PASSWORD,
-            auth_plugin=AUTH_PLUGIN
+            auth_plugin=AUTH_PLUGIN,
+            port=PORT
         )
 
         cursor = conn.cursor()

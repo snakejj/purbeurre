@@ -5,7 +5,7 @@
 
 import mysql.connector
 
-from configdb import USER, PASSWORD, HOST, DB_NAME, AUTH_PLUGIN
+from configdb import USER, PASSWORD, HOST, DB_NAME, AUTH_PLUGIN, PORT
 
 
 def execute_sql(cursor, name_of_database):
@@ -38,7 +38,8 @@ def main():
             password=PASSWORD,
             host=HOST,
             db=DB_NAME,
-            auth_plugin=AUTH_PLUGIN
+            auth_plugin=AUTH_PLUGIN,
+            port=PORT
             )
 
         print("La base de données", DB_NAME, "existe déja !\n")
@@ -54,7 +55,8 @@ def main():
             user=USER,
             password=PASSWORD,
             host=HOST,
-            auth_plugin=AUTH_PLUGIN
+            auth_plugin=AUTH_PLUGIN,
+            port=PORT
             )
 
         cursor = cnx.cursor()

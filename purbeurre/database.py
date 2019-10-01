@@ -8,7 +8,7 @@ import json
 import mysql.connector
 import sys
 
-from database.configdb import USER, PASSWORD, HOST, DB_NAME, AUTH_PLUGIN
+from database.configdb import USER, PASSWORD, HOST, DB_NAME, AUTH_PLUGIN, PORT
 
 
 class Database:
@@ -64,7 +64,8 @@ class Database:
                 password=PASSWORD,
                 host=HOST,
                 db=DB_NAME,
-                auth_plugin=AUTH_PLUGIN
+                auth_plugin=AUTH_PLUGIN,
+                port=PORT
             )
 
             print("Connexion effectué avec succès !\n")
