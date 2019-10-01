@@ -8,27 +8,17 @@ import mysql.connector
 from configdb import USER, PASSWORD, HOST, DB_NAME, AUTH_PLUGIN
 
 
-def execute_sql(cursor):
+def execute_sql(cursor, name_of_database):
     """Method which execute SQL requests"""
     # Open and read the requests as a single buffer
-    sqlrequests = """
-    CREATE SCHEMA IF NOT EXISTS `PurBeurre` ;
-    USE `PurBeurre` ;
-        """
+    sqlrequest1 = "CREATE SCHEMA IF NOT EXISTS %s" % name_of_database
+    sqlrequest2 = "USE %s" % name_of_database
 
-    # Get rid of commentary and ends-lines
-    sqlrequests = "".join(
-        line for line in sqlrequests.split("\n") if not line.startswith('--')
-        )
-
-    # Get rid of empty lines
-    sqlCommands = [
-        line.strip() for line in sqlrequests.split(";") if line.strip()
-        ]
+    sqlcommands = [sqlrequest1, sqlrequest2]
 
     # Execute every command from the input file
-    for command in sqlCommands:
-        cursor.execute(command)
+    for request in sqlcommands:
+        cursor.execute(request)
 
 ###############################################################################
 
@@ -51,7 +41,7 @@ def main():
             auth_plugin=AUTH_PLUGIN
             )
 
-        print("La base de données existe déja !\n")
+        print("La base de données", DB_NAME, "existe déja !\n")
         cursor = cnx.cursor()
 
     except mysql.connector.Error:
@@ -70,8 +60,8 @@ def main():
         cursor = cnx.cursor()
 
         try:
-            execute_sql(cursor)
-            print("Base de données crées avec succès !\n")
+            execute_sql(cursor, DB_NAME)
+            print("La base de données", DB_NAME, "à été crée avec succès !\n")
 
         except NameError:
 
