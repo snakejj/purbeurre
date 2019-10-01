@@ -27,6 +27,37 @@ HOST : the host
 DB_NAME : the database name  
 AUTH_PLUGIN : the Authentication Plugin  
 
+## Create/Delete the database :
+
+In order to create or delete the database, you have to first edit the file
+"configdb.py" located in the subfolder "database" in order to choose the name
+of the database you wish to create or delete.
+
+***
+Create the database :  
+################
+
+1. Open the command prompt.  
+2. cd to the directory where dbcreator.py is located,
+in the subfolder "database".  
+3. Run this command in your shell:
+
+```bash
+python3 dbcreator.py
+```
+***
+Delete the database :  
+################
+
+1. Open the command prompt.  
+2. cd to the directory where dberaser.py is located,
+in the subfolder "database".   
+3. Run this command in your shell:
+
+```bash
+python3 dberaser.py
+```
+***
 ## Start the script
 
 1. Open the command prompt.  
