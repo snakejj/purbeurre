@@ -7,20 +7,11 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
--- -----------------------------------------------------
--- Schema PurBeurre
--- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema PurBeurre
+-- Table `Category`
 -- -----------------------------------------------------
--- CREATE SCHEMA IF NOT EXISTS `PurBeurre` ;
--- USE `PurBeurre` ;
-
--- -----------------------------------------------------
--- Table `PurBeurre`.`Category`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `PurBeurre`.`Category` (
+CREATE TABLE IF NOT EXISTS `Category` (
   `category_id` INT NOT NULL AUTO_INCREMENT,
   `category_name` VARCHAR(45) NULL COMMENT 'categories',
   PRIMARY KEY (`category_id`))
@@ -28,9 +19,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `PurBeurre`.`Food`
+-- Table `Food`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `PurBeurre`.`Food` (
+CREATE TABLE IF NOT EXISTS `Food` (
   `food_id` INT(0) NOT NULL AUTO_INCREMENT,
   `category_id` INT NOT NULL,
   `food_name` VARCHAR(80) NULL COMMENT 'product_name',
@@ -42,16 +33,16 @@ CREATE TABLE IF NOT EXISTS `PurBeurre`.`Food` (
   INDEX `fk_Food_1_idx` (`category_id` ASC) VISIBLE,
   CONSTRAINT `fk_Food_1`
     FOREIGN KEY (`category_id`)
-    REFERENCES `PurBeurre`.`Category` (`category_id`)
+    REFERENCES `Category` (`category_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `PurBeurre`.`History`
+-- Table `History`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `PurBeurre`.`History` (
+CREATE TABLE IF NOT EXISTS `History` (
   `history_id` INT(0) NOT NULL AUTO_INCREMENT,
   `food_id` INT NULL,
   `surrogate_id` INT NULL,
@@ -60,12 +51,12 @@ CREATE TABLE IF NOT EXISTS `PurBeurre`.`History` (
   INDEX `fk_History_1_idx` (`food_id` ASC) VISIBLE,
   CONSTRAINT `fk_History_1`
     FOREIGN KEY (`food_id`)
-    REFERENCES `PurBeurre`.`Food` (`food_id`)
+    REFERENCES `Food` (`food_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_History_2`
     FOREIGN KEY (`surrogate_id`)
-    REFERENCES `PurBeurre`.`Food` (`food_id`)
+    REFERENCES `Food` (`food_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
